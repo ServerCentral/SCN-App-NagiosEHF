@@ -6,6 +6,6 @@ cpanm --installdeps .
 
 or on Debian/Ubuntu:
 
-apt-get install libconfig-general-perl, libproc-fork-perl, libproc-daemon-perl
+apt-get install libconfig-general-perl libproc-fork-perl libproc-daemon-perl
 
 
