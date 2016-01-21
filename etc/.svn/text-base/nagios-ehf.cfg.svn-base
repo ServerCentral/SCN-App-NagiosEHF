@@ -1,0 +1,18 @@
+# Spawn a child process with each test
+<Tests>
+	<localhost>
+		check_cmd 	= /usr/local/nagios-ehf/sbin/check_http -I 127.0.0.1 -t 5 -p 80 
+		pre_okay_cmd	= /bin/true 
+		pre_warn_cmd	= /bin/true 
+		pre_crit_cmd	= /bin/true 
+		pre_unkn_cmd	= /bin/true
+		okay_cmd	= /etc/init.d/quagga start
+		warn_cmd	= /bin/true
+		crit_cmd	= /etc/init.d/quagga stop
+		unkn_cmd	= /bin/true
+		interval	= 5 
+		interval_cmd	= /bin/true
+	</localhost>
+</Tests>
+
+pidfile = /var/run/nagios-ehf.pid

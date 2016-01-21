@@ -1,0 +1,45 @@
+#!/usr/bin/make -f
+
+configure: configure-stamp
+configure-stamp:
+	touch configure-stamp
+build: build-indep
+build-indep: build-stamp
+build-stamp:
+	dh_testdir
+	touch build-stamp
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs
+	touch `pwd`/debian/nagios-ehf.init
+	rm `pwd`/debian/nagios-ehf.init
+	cp `pwd`/nagios-ehf/init.d/nagios-ehf `pwd`/debian/nagios-ehf.init	
+	cp -Rp `pwd`/nagios-ehf/sbin/ `pwd`/debian/nagios-ehf/usr/local/nagios-ehf/
+	rm -rf `pwd`/debian/nagios-ehf/usr/local/nagios-ehf/sbin/.svn
+	cp -Rp `pwd`/nagios-ehf/etc/ `pwd`/debian/nagios-ehf/usr/local/nagios-ehf/
+	rm -rf `pwd`/debian/nagios-ehf/usr/local/nagios-ehf/etc/.svn
+binary-indep: build install
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdirs
+	dh_install
+	dh_installinit
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure

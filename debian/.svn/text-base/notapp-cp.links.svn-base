@@ -1,0 +1,3 @@
+/home/www/notapp-cp/htdocs/node_js/node_modules/forever/bin/forever /usr/local/bin/forever
+/home/www/notapp-cp/htdocs/node_js/node_modules/forever/bin/foreverd /usr/local/bin/foreverd
+/home/www/notapp-cp/htdocs/node_js/node_modules/forever/bin/monitor /usr/local/bin/monitor

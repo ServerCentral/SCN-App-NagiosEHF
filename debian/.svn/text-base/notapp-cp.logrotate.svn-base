@@ -1,0 +1,14 @@
+/var/log/notapp/*.log {
+	rotate 7
+	daily
+	missingok
+	copytruncate
+	compress
+}
+/home/www/notapp-cp/cake/app/tmp/logs/*.log {
+	rotate 7
+	daily
+	missingok
+	copytruncate
+	compres
+}

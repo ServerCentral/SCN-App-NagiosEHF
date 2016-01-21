@@ -1,0 +1,12 @@
+Source: nagios-ehf 
+Section: utils
+Priority: required
+Maintainer: Cloud Builder (SCN) <cloud@servercentral.com>
+Standards-Version: 3.9.2
+
+Package: nagios-ehf 
+Architecture: any
+Multi-Arch: foreign
+Depends: libconfig-general-perl, libproc-fork-perl, libproc-daemon-perl 
+Maintainer: Cloud Builder (SCN) <cloud@servercentral.com>
+Description: SCN Nagios Event Handler Framework

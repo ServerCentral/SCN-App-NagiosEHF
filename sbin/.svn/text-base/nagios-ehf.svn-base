@@ -1,0 +1,116 @@
+#!/usr/bin/perl
+
+# nagios-ehf
+# Nagios Event Handler Framework (zomg)
+# 20121011
+# Zach Dykstra, ServerCentral
+
+use strict;
+use Config::General;
+use Getopt::Long qw(:config gnu_getopt);
+use Proc::Fork;
+use Sys::Syslog qw(:standard :macros);
+use Data::Dumper;
+use POSIX;
+use Proc::Daemon;
+
+our %c;
+my %opt = ();
+my ( $type, $cmd, $val, @pids );
+
+GetOptions( \%opt, 'config|c=s', 'daemon|d', 'pidfile|p', )
+  or die "Missing --config, bailing"
+  unless exists $opt{'config'};
+
+my %options = (
+                '-ConfigFile'     => $opt{'config'},
+                '-LowerCaseNames' => 1,
+                '-AutoTrue'       => 1,
+);
+
+my $config = new Config::General(%options);
+%c = $config->getall;
+
+if ( exists $opt{'daemon'} ) {
+    Proc::Daemon::Init();
+    if ( exists $opt{'pidfile'} ) {
+        open( PF, ">$c{'pidfile'}" );
+        print PF $$;
+        close PF;
+    }
+}
+
+openlog( "nagios-ehf", "pid", "local0" );
+
+foreach my $test ( keys %{ $c{'tests'} } ) {
+    run_fork {
+        child {
+            $SIG{'INT'} =
+              sub { syslog( LOG_INFO, "$test test exiting!" ); die; };
+            $SIG{'TERM'} =
+              sub { syslog( LOG_INFO, "$test test exiting!" ); die; };
+            my $state = 3;
+            while (1) {
+
+                # actually run our check command, normal nagios exit codes apply
+                my ( $output, $ret ) =
+                  &run_cmd( $c{'tests'}{$test}{'check_cmd'} );
+
+# if the return code doesn't match our previous state, determine how to handle it
+                if ( $state != $ret ) {
+                    syslog( LOG_INFO, "$output" );
+                    if ( $ret == 0 ) {
+                        $type = "okay";
+                    }
+                    elsif ( $ret == 1 ) {
+                        $type = "warn";
+                    }
+                    elsif ( $ret == 2 ) {
+                        $type = "crit";
+                    }
+                    elsif ( $ret == 3 ) {
+                        $type = "unkn";
+                    }
+                    $val = $ret;
+                    $cmd = "pre_" . $type . "_cmd";
+
+                    my ( $output, $ret ) = &run_cmd( $c{'tests'}{$test}{$cmd} );
+                    syslog( LOG_INFO, "$cmd '$c{'tests'}{$test}{$cmd}' exited with $ret : $output" );
+
+             # check our pre_$state_cmd, to ensure external requirements are met
+                    if ( $ret == 0 ) {
+                        $cmd = $type . "_cmd";
+                        my ( $output, $ret ) =
+                          &run_cmd( $c{'tests'}{$test}{$cmd} );
+                        syslog( LOG_INFO, "$cmd '$c{'tests'}{$test}{$cmd}' exited with $ret: $output" );
+                        if ( ( $ret == 0 ) or ( $ret == 1 ) ) {
+
+                  # our state change command returned a 0, mark our state change
+                            $state = $val;
+                        }
+                    }
+                }
+                qx{ $c{'test'}{$test}{'interval_cmd'} };
+                sleep $c{'tests'}{$test}{'interval'};
+            }
+        }
+        parent {
+            my $child_pid = shift;
+            push @pids, $child_pid;
+        }
+    }
+}
+
+$SIG{'INT'}  = sub { kill 15, @pids; };
+$SIG{'TERM'} = sub { kill 15, @pids; };
+
+foreach my $pid (@pids) {
+    waitpid $pid, 0;
+    shift @pids, $pid;
+}
+
+sub run_cmd {
+    my $cmd = shift;
+    ( $_ = qx{$cmd 2>&1}, $? >> 8 );
+}
+

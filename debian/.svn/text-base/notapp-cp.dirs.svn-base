@@ -1,0 +1,8 @@
+etc/logrotate.d
+etc/default
+usr/local/bin
+usr/local/lib
+home/www/notapp-cp
+home/www/notapp-cp/logs
+home/www/notapp-cp/htdocs
+home/www/notapp-cp/htdocs/cake

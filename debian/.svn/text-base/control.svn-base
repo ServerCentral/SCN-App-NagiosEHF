@@ -1,0 +1,14 @@
+Source: notapp-cp
+Section: utils
+Priority: required
+Maintainer: Cloud Builder (SCN) <cloud@servercentral.com>
+Standards-Version: 3.9.2
+Build-Depends: nodejs, nodejs-legacy
+
+Package: notapp-cp
+Architecture: any
+Multi-Arch: foreign
+Depends: yajl-tools, nodejs (>=0.10.21), nodejs-legacy, mysql-client, apache2, php5, php5-cli, php5-common, php5-curl, php5-mysql
+Maintainer: Cloud Builder (SCN) <cloud@servercentral.com>
+Description: SCN Cloud Control Plane
+  ServerCentral NotApp Control Plane package

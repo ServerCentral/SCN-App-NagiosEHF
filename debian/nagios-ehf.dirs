@@ -1,0 +1,6 @@
+etc/default
+etc/init.d
+usr/local/nagios-ehf
+usr/local/nagios-ehf/sbin
+usr/local/nagios-ehf/etc
+
