@@ -1,12 +1,20 @@
-Source: nagios-ehf 
+Source: nagios-ehf
 Section: utils
 Priority: required
-Maintainer: Cloud Builder (SCN) <cloud@servercentral.com>
-Standards-Version: 3.9.2
+Maintainer: Hannibal Buildbot (builder01.ord6) <support@servercentral.com>
+Standards-Version: 3.9.5
+Build-Depends: 
+ debhelper (>= 8.0.0),
+ cpanminus, 
+ perl,
+ perl-base (>= 5.18.2)
 
-Package: nagios-ehf 
-Architecture: any
-Multi-Arch: foreign
-Depends: libconfig-general-perl, libproc-fork-perl, libproc-daemon-perl 
-Maintainer: Cloud Builder (SCN) <cloud@servercentral.com>
-Description: SCN Nagios Event Handler Framework
+Package: nagios-ehf
+Architecture: amd64 
+Priority: optional
+Depends:
+ ${misc:Depends},
+ perl,
+ perl-base,
+Provides: nagios-ehf
+Description: ServerCentral baby-nagios 

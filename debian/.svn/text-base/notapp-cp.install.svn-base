@@ -1,3 +1,0 @@
-misc/notapp-plane.default.sample etc/default/
-misc/amqp.so usr/lib/php5/20100525/
-misc/10-amqp.ini etc/php5/conf.d/

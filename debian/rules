@@ -1,45 +1,52 @@
 #!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
 
-configure: configure-stamp
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+
+configure: .configure-stamp
 configure-stamp:
 	touch configure-stamp
-build: build-indep
-build-indep: build-stamp
-build-stamp:
+
+clean: 
 	dh_testdir
-	touch build-stamp
-clean:
+	dh_auto_clean
+
+build: 
 	dh_testdir
-	dh_testroot
-	rm -f build-stamp configure-stamp
+	dh_auto_configure
+	dh_auto_build
+	dh_auto_test
 
 install: build
+	ls -lah . 
 	dh_testdir
 	dh_testroot
 	dh_prep
 	dh_installdirs
-	touch `pwd`/debian/nagios-ehf.init
-	rm `pwd`/debian/nagios-ehf.init
-	cp `pwd`/nagios-ehf/init.d/nagios-ehf `pwd`/debian/nagios-ehf.init	
-	cp -Rp `pwd`/nagios-ehf/sbin/ `pwd`/debian/nagios-ehf/usr/local/nagios-ehf/
-	rm -rf `pwd`/debian/nagios-ehf/usr/local/nagios-ehf/sbin/.svn
-	cp -Rp `pwd`/nagios-ehf/etc/ `pwd`/debian/nagios-ehf/usr/local/nagios-ehf/
-	rm -rf `pwd`/debian/nagios-ehf/usr/local/nagios-ehf/etc/.svn
-binary-indep: build install
+	cpanm -L `pwd`/debian/nagios-ehf/usr/local/nagios-ehf/ --installdeps .
 
+binary-indep: build install
+	echo "binary-indep called"
 binary-arch: build install
 	dh_testdir
 	dh_testroot
-	dh_installdirs
 	dh_install
 	dh_installinit
 	dh_link
-	dh_strip
 	dh_compress
 	dh_fixperms
+	dh_strip
 	dh_installdeb
 	dh_gencontrol
 	dh_builddeb
-
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+
+#%:
+#        dh $@
