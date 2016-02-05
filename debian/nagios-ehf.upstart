@@ -14,5 +14,5 @@ respawn limit 10 5
 umask 022
 
 console log 
-expect fork
+expect daemon
 exec /usr/local/nagios-ehf/sbin/nagios-ehf -c /usr/local/nagios-ehf/etc/nagios-ehf.cfg -d -p
