@@ -1,0 +1,13 @@
+[Unit]
+Description=nagios-ehf monitoring framework
+Documentation: https://github.com/ServerCentral/nagios-ehf
+
+[Service]
+Environment=PERL5LIB=/usr/local/nagios-ehf/lib/perl5
+Type=forking
+ExecStart=/usr/local/nagios-ehf/sbin/nagios-ehf -c /usr/local/nagios-ehf/etc/nagios-ehf.cfg -d -p
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
