@@ -1,6 +1,6 @@
 [Unit]
 Description=nagios-ehf monitoring framework
-Documentation: https://github.com/ServerCentral/nagios-ehf
+Documentation=https://github.com/ServerCentral/nagios-ehf
 
 [Service]
 Environment=PERL5LIB=/usr/local/nagios-ehf/lib/perl5
