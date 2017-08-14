@@ -1,1 +1,3 @@
 nagios-ehf source: source-is-missing sbin/check_http
+nagios-ehf source: source-is-missing sbin/check_ntp_peer
+nagios-ehf source: source-is-missing sbin/check_dns
