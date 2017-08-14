@@ -16,5 +16,8 @@ Depends:
  ${misc:Depends},
  perl,
  perl-base,
+ libconfig-general-perl,
+ libproc-fork-perl,
+ libproc-daemon-perl,
 Provides: nagios-ehf
 Description: ServerCentral baby-nagios 
