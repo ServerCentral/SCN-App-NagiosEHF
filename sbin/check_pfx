@@ -34,7 +34,7 @@ sub check_process {
   }
 }
 
-sub check_port{
+sub check_port {
   my $port = shift;
   if (`netstat -anl | $grep LISTEN | $grep $listen_address:$port` ne "") {
     if ($verbose) {print "port $listen_address:$port is listening\n";}
