@@ -1,0 +1,48 @@
+#! /usr/bin/perl
+use strict;
+use warnings;
+use Getopt::Long;
+
+my $ps = '/bin/ps';
+my $grep = '/bin/grep';
+my $listen_address = "";
+#retrieve input
+Getopt::Long::Configure('bundling');
+use vars qw($verbose $address);
+GetOptions
+  (
+    "verbose" => \$verbose,
+    "address=s" => \$address
+  );
+
+my @procs = ('qmgr', 'pickup', 'master');
+my @ports = ('25');
+if ($verbose) {
+  print "will check for the following procs: @procs\n";
+  print "will check for the following ports: @ports\n";
+}
+
+sub check_process {
+  my $proc = shift;
+  if (`$ps -aef | $grep $proc | grep -v grep` ne ""){
+    if ($verbose) {print "$proc was found\n";}
+  }
+  else {
+    print "CRITICAL: $proc was not found\n";
+    exit 2; #shot circuit and exit the entire check, no point in proceeding if we have
+    #       a dead process
+  }
+}
+
+sub check_port {
+  my $port = shift;
+  if (`netstat -anl | $grep LISTEN | $grep $listen_address:$port` ne "") {
+    if ($verbose) {print "port $listen_address:$port is listening\n";}
+  }
+  else {
+    print "CRITICAL: port $listen_address:$port is not listening\n";
+  }
+}
+if (defined $address) { $listen_address = $address;}
+foreach my $process (@procs) {check_process($process);}
+foreach my $port (@ports) {check_port($port);}
