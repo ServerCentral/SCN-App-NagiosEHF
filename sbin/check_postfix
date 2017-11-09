@@ -15,7 +15,7 @@ GetOptions
     "address=s" => \$address
   );
 
-my @procs = ('postfix', 'qmgr', 'pickup', 'master');
+my @procs = ('qmgr', 'pickup', 'master');
 my @ports = ('25');
 if ($verbose) {
   print "will check for the following procs: @procs\n";
