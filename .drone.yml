@@ -5,5 +5,5 @@ pipeline:
     secrets: [ darkpan_password ]
     when:
       event: push
-      branch: distify 
+      branch: master 
       status: success
