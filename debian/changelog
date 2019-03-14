@@ -1,5 +1,0 @@
-nagios-ehf (1) trusty; urgency=medium
-
-  * fix missing init script
-
- -- Hannibal Buildbot (builder01.ord6) <support@servercentral.com>  Thu, 03 Dec 2015 15:31:13 -0600
