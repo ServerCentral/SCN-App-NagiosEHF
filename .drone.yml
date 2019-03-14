@@ -1,0 +1,9 @@
+pipeline:
+  distify:
+    image: registry.servercentral.com/drone-plugins/distify
+    pull: true
+    secrets: [ darkpan_password ]
+    when:
+      event: push
+      branch: master
+      status: success
